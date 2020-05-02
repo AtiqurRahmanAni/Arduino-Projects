@@ -1,86 +1,109 @@
+#include <DS3231.h>
 #include<LiquidCrystal_I2C.h>
-#include<wire.h>
-LiquidCrystal_I2C lcd(0x27,16,4);
-int h=1,m=31,s=55,d=30,mon=12,y=2019,flag=1;
-char hour[3],minute[3],second[3];
-char str[3]="PM";
-void setup() 
+LiquidCrystal_I2C lcd(0x27,16,2);
+DS3231  rtc(SDA, SCL);
+String s,s1;
+void setup()
 {
-  pinMode(13,OUTPUT);
-  digitalWrite(13,0);
+  Serial.begin(115200);
+  rtc.begin();
   lcd.init();
   lcd.backlight();
   lcd.clear();
-  lcd.print("Time-");
-  lcd.setCursor(6,0);
-  sprintf(hour,"%02d",h);
-  lcd.print(hour);
-  lcd.setCursor(8,0);
-  lcd.print(':');
-  lcd.setCursor(9,0);
-  sprintf(minute,"%02d",m);
-  lcd.print(minute);
-  lcd.setCursor(11,0);
-  lcd.print(':');
-  sprintf(second,"%02d",s);
-  lcd.setCursor(12,0);
-  lcd.print(second);
-  lcd.setCursor(0,1);
-  lcd.print("Date-");
-  lcd.setCursor(14,0);
-  lcd.print(str);
-  lcd.setCursor(6,1);
-  lcd.print(d);
-  lcd.print('/');
-  lcd.print(mon);
-  lcd.print('/');
-  lcd.print(y);
-  Serial.begin(9600);
-  
+  pinMode(13,OUTPUT);
+  digitalWrite(13,LOW);
+  //rtc.setDOW(SATURDAY);     // Set Day-of-Week to SUNDAY
+  //rtc.setTime(8,24, 0);     // Set the time to 12:00:00 (24hr format)
+  //rtc.setDate(22, 2, 2020);   // Set the date to January 1st, 2014
 }
 
-void loop() 
+void loop()
 {
-    if(s==60)
+  s=rtc.getTimeStr();
+  s1=rtc.getDOWStr();
+  if((s[0]=='1' && (s[1]=='2'||s[1]=='3'||s[1]=='4'||s[1]=='5'||s[1]=='6'||s[1]=='7'||s[1]=='8'||s[1]=='9')))
+  {
+    lcd.setCursor(8,0);
+    lcd.print("PM");
+    if(s[1]=='3')
     {
-      s=0;
-      m++;
-      if(m==60)
-      {
-        m=0;
-        h++;
-        if(h==13)
-        {
-          h=1;
-          if(flag==0)
-            flag=1;
-          else if(flag==1)
-            flag=0;
-          if(flag==0)
-          {
-             lcd.setCursor(14,0);
-             lcd.print("AM");
-          }
-          else if(flag==1)
-          {
-             lcd.setCursor(14,0);
-             lcd.print("PM");
-          }
-          
-        }
-        lcd.setCursor(6,0);
-        sprintf(hour,"%02d",h);
-        lcd.print(hour);
-      }
-      lcd.setCursor(9,0);
-      sprintf(minute,"%02d",m);
-      lcd.print(minute);
+      s[0]='0';
+      s[1]='1';
     }
-    sprintf(second,"%02d",s);
-    lcd.setCursor(12,0);
-    lcd.print(second);
-    s++;
-    delay(1000);
-   
-
+    else if(s[1]=='4')
+    {
+      s[0]='0';
+      s[1]='2';
+    }
+    else if(s[1]=='5')
+    {
+      s[0]='0';
+      s[1]='3';
+    }
+    else if(s[1]=='6')
+    {
+      s[0]='0';
+      s[1]='4';
+    }
+    else if(s[1]=='7')
+    {
+      s[0]='0';
+      s[1]='5';
+    }
+    else if(s[1]=='8')
+    {
+      s[0]='0';
+      s[1]='6';
+    }
+    else if(s[1]=='9')
+    {
+      s[0]='0';
+      s[1]='7';
+    }
+  }
+  else if((s[0]=='2' && (s[1]=='0'||s[1]=='1'||s[1]=='2'||s[1]=='3'||s[1]=='4')))
+  {
+    if(s[1]=='0')
+    {
+      s[0]='0';
+      s[1]='8';
+    }
+    else if(s[1]=='1')
+    {
+      s[0]='0';
+      s[1]='9';
+    }
+    else if(s[1]=='2')
+    {
+      s[0]='1';
+      s[1]='0';
+    }
+    else if(s[1]=='3')
+    {
+      s[0]='1';
+      s[1]='1';
+    }
+    lcd.setCursor(8,0);
+    lcd.print("PM");
+  }
+  else
+  {
+    lcd.setCursor(8,0);
+    lcd.print("AM");
+  }
+  if(s[0]=='0'&&s[1]=='0')
+  {
+    s[0]='1';
+    s[1]='2';
+  }
+  lcd.setCursor(0,0);
+  lcd.print(s);
+  lcd.setCursor(0,1);
+  lcd.print(rtc.getDateStr());
+  lcd.setCursor(11,0);
+  lcd.print(rtc.getTemp());
+  lcd.setCursor(12,1);
+  lcd.print(s1[0]);
+  lcd.print(s1[1]);
+  lcd.print(s1[2]);
 }
