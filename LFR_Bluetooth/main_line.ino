@@ -134,7 +134,7 @@ void lineFollow()
   }
   else if (error == 420)
   {
-    digitalWrite(13, LOW);
+    digitalWrite(13, HIGH);
     if (lastsensor == 1)
       wheel(-turnspeedleft,turnspeedright);
     else if (lastsensor == 2)
