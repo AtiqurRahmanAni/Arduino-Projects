@@ -56,7 +56,16 @@ void lineFollow()
     //Check which direction the bot will go
     if (flag == 1)
     {
-      turnRight(110, 400);/*First parameter is time to go forward and second is turning duration*/                                                           
+      //turnRight(110, 400);/*First parameter is time to go forward and second is turning duration*/
+      goStraight(110);
+      wheel(0, 0);
+      delay(150);
+      while (true)
+      {
+        if (analogRead(2) > threshold && analogRead(3) > threshold)
+          break;
+        wheel(turnspeedleft, -turnspeedright);
+      }
       while (true)
       {
         if (analogRead(2) < threshold)
@@ -69,17 +78,26 @@ void lineFollow()
           s[4] = 0;
         if (s[3] == 1 || s[4] == 1)
         {
-          wheel(-turnspeedleft,turnspeedright);
+          wheel(-turnspeedleft, turnspeedright);
           delay(70);
           stopBot(90);
           break;
         }
-        wheel(turnspeedleft,-turnspeedright);
+        wheel(turnspeedleft, -turnspeedright);
       }
     }
     else if (flag == 2)
     {
-      turnLeft(110, 400); /*First parameter is time to go forward and second is turning duration*/  
+      //turnLeft(110, 400); /*First parameter is time to go forward and second is turning duration*/
+      goStraight(110);
+      wheel(0, 0);
+      delay(150);
+      while (true)
+      {
+        if (analogRead(2) > threshold && analogRead(3) > threshold)
+          break;
+        wheel(-turnspeedleft, turnspeedright);
+      }
       while (true)
       {
         if (analogRead(2) < threshold)
@@ -92,12 +110,12 @@ void lineFollow()
           s[4] = 0;
         if (s[3] == 1 || s[4] == 1)
         {
-          wheel(turnspeedleft,-turnspeedright);
+          wheel(turnspeedleft, -turnspeedright);
           delay(70);
           stopBot(90);
           break;
         }
-        wheel(-turnspeedleft,turnspeedright);
+        wheel(-turnspeedleft, turnspeedright);
       }
     }
     else if (flag == 3)
@@ -116,14 +134,21 @@ void lineFollow()
       while (true)
       {
         readLine();
-        if ((sums==2 || sums==1) && s[0]==0 && s[1]==0 && s[2]==0 && s[3]==0)
+        if ((sums == 2 || sums == 1) && s[0] == 0 && s[1] == 0 && s[2] == 0 && s[3] == 0)
           break;
         forwardRight(40, 0); //First parameter is speed difference and second is delay time
       }
     }
     else if (flag == 5)
     {
-      forwardLeft(40, 0); //First parameter is speed difference and second is delay time
+      stopBot(60);
+      while (true)
+      {
+        readLine();
+        if ((s[3] == 1 || s[4] == 1) && s[5] == 0 && s[6] == 0 && s[7] == 0)
+          break;
+        forwardLeft(55, 0); //First parameter is speed difference and second is delay time
+      }
     }
     else if (count > 13)
     {
@@ -136,11 +161,11 @@ void lineFollow()
   {
     digitalWrite(13, HIGH);
     if (lastsensor == 1)
-      wheel(-turnspeedleft,turnspeedright);
+      wheel(-turnspeedleft, turnspeedright);
     else if (lastsensor == 2)
-      wheel(turnspeedleft,-turnspeedright);
-    else if(lastsensor==3)
-      wheel(turnspeedleft,turnspeedright);
+      wheel(turnspeedleft, -turnspeedright);
+    else if (lastsensor == 3)
+      wheel(turnspeedleft, turnspeedright);
   }
   else
   {

@@ -29,12 +29,12 @@ String sx="",s1="",s2="";
 char c;
 bool linecolorblack=true;
 int s[8];
-int nr=6,nl=5,ns=2,nfr=1,nfl=0;
-int right[10]={0,1,4,6,7,12};
-int left[10]={3,9,10,11,13};
+int nr=5,nl=6,ns=2,nfr=0,nfl=1;
+int right[10]={0,2,3,4,10};
+int left[10]={1,6,7,9,12,13};
 int straight[10]={5,8};
-int forwardright[10]={2};
-int forwardleft[10]={};
+int forwardright[10]={};
+int forwardleft[10]={11};
 int preverror,count=0;
 int del=4500,sums=0;
 void setup() 
