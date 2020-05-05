@@ -62,20 +62,14 @@ void lineFollow()
       delay(150);
       while (true)
       {
-        if (analogRead(2) > threshold && analogRead(3) > threshold)
+        readLine();
+        if (s[3]==0 && s[4]==0)
           break;
         wheel(turnspeedleft, -turnspeedright);
       }
       while (true)
       {
-        if (analogRead(2) < threshold)
-          s[3] = 1;
-        else
-          s[3] = 0;
-        if (analogRead(3) < threshold)
-          s[4] = 1;
-        else
-          s[4] = 0;
+        readLine();
         if (s[3] == 1 || s[4] == 1)
         {
           wheel(-turnspeedleft, turnspeedright);
@@ -94,20 +88,14 @@ void lineFollow()
       delay(150);
       while (true)
       {
-        if (analogRead(2) > threshold && analogRead(3) > threshold)
+       readLine();
+        if (s[3]==0 && s[4]==0)
           break;
         wheel(-turnspeedleft, turnspeedright);
       }
       while (true)
       {
-        if (analogRead(2) < threshold)
-          s[3] = 1;
-        else
-          s[3] = 0;
-        if (analogRead(3) < threshold)
-          s[4] = 1;
-        else
-          s[4] = 0;
+        readLine();
         if (s[3] == 1 || s[4] == 1)
         {
           wheel(turnspeedleft, -turnspeedright);
@@ -141,13 +129,15 @@ void lineFollow()
     }
     else if (flag == 5)
     {
-      stopBot(60);
+      goStraight(110);
+      wheel(0, 0);
+      delay(150);
       while (true)
       {
         readLine();
-        if ((s[3] == 1 || s[4] == 1) && s[5] == 0 && s[6] == 0 && s[7] == 0)
+        if (s[4] == 1 && s[5] == 0 && s[6] == 0 && s[7] == 0 && s[0] == 0 && s[1] == 0 && s[2] == 0)
           break;
-        forwardLeft(55, 0); //First parameter is speed difference and second is delay time
+        forwardLeft(70, 0); //First parameter is speed difference and second is delay time
       }
     }
     else if (count > 13)
