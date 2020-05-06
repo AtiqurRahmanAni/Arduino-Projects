@@ -63,6 +63,13 @@ void lineFollow()
       while (true)
       {
         readLine();
+        if (sums==0 || s[3]==1 || s[4]==1 ||((s[3]==0 && s[4]==0) && (s[0]==1 || s[7]==1)))
+          break;
+        wheel(turnspeedleft, -turnspeedright);
+      }
+      while (true)
+      {
+        readLine();
         if (s[3]==0 && s[4]==0)
           break;
         wheel(turnspeedleft, -turnspeedright);
@@ -70,7 +77,7 @@ void lineFollow()
       while (true)
       {
         readLine();
-        if (s[3] == 1 || s[4] == 1)
+        if (s[3] == 1 || s[4]==1)
         {
           wheel(-turnspeedleft, turnspeedright);
           delay(70);
@@ -88,6 +95,13 @@ void lineFollow()
       delay(150);
       while (true)
       {
+        readLine();
+        if (sums==0 || s[3]==1 || s[4]==1 ||((s[3]==0 && s[4]==0) && (s[0]==1 || s[7]==1)))
+          break;
+        wheel(-turnspeedleft, turnspeedright);
+      }
+      while (true)
+      {
        readLine();
         if (s[3]==0 && s[4]==0)
           break;
@@ -96,7 +110,7 @@ void lineFollow()
       while (true)
       {
         readLine();
-        if (s[3] == 1 || s[4] == 1)
+        if (s[3]==1 || s[4] == 1)
         {
           wheel(turnspeedleft, -turnspeedright);
           delay(70);
@@ -118,13 +132,15 @@ void lineFollow()
     }
     else if (flag == 4)
     {
-      stopBot(60);
+      goStraight(110);
+      wheel(0, 0);
+      delay(150);
       while (true)
       {
         readLine();
-        if ((sums == 2 || sums == 1) && s[0] == 0 && s[1] == 0 && s[2] == 0 && s[3] == 0)
+        if (s[3] == 1 && s[5] == 0 && s[6] == 0 && s[7] == 0 && s[0] == 0 && s[1] == 0 && s[2] == 0)
           break;
-        forwardRight(40, 0); //First parameter is speed difference and second is delay time
+        forwardRight(70, 0); //First parameter is speed difference and second is delay time
       }
     }
     else if (flag == 5)
@@ -140,7 +156,7 @@ void lineFollow()
         forwardLeft(70, 0); //First parameter is speed difference and second is delay time
       }
     }
-    else if (count > 13)
+    else if (count > 11)
     {
       stopBot(5000);
       count = -1;
