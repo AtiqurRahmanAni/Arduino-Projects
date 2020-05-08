@@ -10,6 +10,9 @@ void lineFollow()
   if (error == 1000)
   {
     digitalWrite(13, HIGH);
+    lcd.setCursor(8, 0);
+    lcd.print(count1);
+    count1++;
     flag = 0;
     ////////////////////////////////
     for (i = 0; i < nr; i++)
@@ -63,24 +66,24 @@ void lineFollow()
       while (true)
       {
         readLine();
-        if (sums==0 || s[3]==1 || s[4]==1 ||((s[3]==0 && s[4]==0) && (s[0]==1 || s[7]==1)))
+        if (sums == 0 || s[3] == 1 || s[4] == 1 || ((s[3] == 0 && s[4] == 0) && (s[0] == 1 || s[7] == 1)))
           break;
         wheel(turnspeedleft, -turnspeedright);
       }
       while (true)
       {
         readLine();
-        if (s[3]==0 && s[4]==0)
+        if (s[3] == 0 && s[4] == 0)
           break;
         wheel(turnspeedleft, -turnspeedright);
       }
       while (true)
       {
         readLine();
-        if (s[3] == 1 || s[4]==1)
+        if (s[3] == 1 || s[4] == 1)
         {
           wheel(-turnspeedleft, turnspeedright);
-          delay(70);
+          delay(80);
           stopBot(90);
           break;
         }
@@ -96,24 +99,24 @@ void lineFollow()
       while (true)
       {
         readLine();
-        if (sums==0 || s[3]==1 || s[4]==1 ||((s[3]==0 && s[4]==0) && (s[0]==1 || s[7]==1)))
-          break;
-        wheel(-turnspeedleft, turnspeedright);
-      }
-      while (true)
-      {
-       readLine();
-        if (s[3]==0 && s[4]==0)
+        if (sums == 0 || s[3] == 1 || s[4] == 1 || ((s[3] == 0 && s[4] == 0) && (s[0] == 1 || s[7] == 1)))
           break;
         wheel(-turnspeedleft, turnspeedright);
       }
       while (true)
       {
         readLine();
-        if (s[3]==1 || s[4] == 1)
+        if (s[3] == 0 && s[4] == 0)
+          break;
+        wheel(-turnspeedleft, turnspeedright);
+      }
+      while (true)
+      {
+        readLine();
+        if (s[3] == 1 || s[4] == 1)
         {
           wheel(turnspeedleft, -turnspeedright);
-          delay(70);
+          delay(80);
           stopBot(90);
           break;
         }
