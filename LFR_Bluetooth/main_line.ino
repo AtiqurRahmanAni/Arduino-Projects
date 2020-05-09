@@ -15,7 +15,7 @@ void lineFollow()
     count1++;
     flag = 0;
     ////////////////////////////////
-    for (i = 0; i < nr; i++)
+    for (i = 0; i < sizeof(right)/sizeof(int); i++)
     {
       if (count == right[i])
       {
@@ -23,7 +23,7 @@ void lineFollow()
         break;
       }
     }
-    for (i = 0; i < nl; i++)
+    for (i = 0; i < sizeof(left)/sizeof(int); i++)
     {
       if (count == left[i])
       {
@@ -31,7 +31,7 @@ void lineFollow()
         break;
       }
     }
-    for (i = 0; i < ns; i++)
+    for (i = 0; i < sizeof(straight)/sizeof(int); i++)
     {
       if (count == straight[i])
       {
@@ -39,7 +39,7 @@ void lineFollow()
         break;
       }
     }
-    for (i = 0; i < nfr; i++)
+    for (i = 0; i < sizeof(forwardright)/sizeof(int); i++)
     {
       if (count == forwardright[i])
       {
@@ -47,7 +47,7 @@ void lineFollow()
         break;
       }
     }
-    for (i = 0; i < nfl; i++)
+    for (i = 0; i < sizeof(forwardleft)/sizeof(int); i++)
     {
       if (count == forwardleft[i])
       {

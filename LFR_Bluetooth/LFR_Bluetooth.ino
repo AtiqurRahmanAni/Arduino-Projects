@@ -33,12 +33,11 @@ String sx="",s1="",s2="",pri="";
 char c;
 bool linecolorblack=true;
 int s[8];
-int nr=6,nl=5,ns=0,nfr=1,nfl=0;
-int right[10]={0,1,4,5,6,10};
-int left[10]={3,7,8,9,11};
-int straight[10]={};
-int forwardright[10]={2};
-int forwardleft[10]={};
+int right[]={0,2,3,4,8};
+int left[]={1,5,6,7,10,11};
+int straight[]={};
+int forwardright[]={};
+int forwardleft[]={9};
 int preverror,count=0,count1=0;
 int del=4500,sums=0;
 void setup() 
