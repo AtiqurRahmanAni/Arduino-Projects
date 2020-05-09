@@ -15,6 +15,7 @@ const int maxspeed = 90; //Speed for line follow
 const int turnspeedright=70; //Speed for line follow
 const int turnspeedleft=70; //Speed for line follow
 int lastsensor,num_sensor=8,i,j,threshold=450;
+int leftspeed=0,rightspeed=0;
 float kp=2.50;
 float kd=27;
 //For wall follow

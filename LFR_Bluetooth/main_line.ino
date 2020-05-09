@@ -84,7 +84,7 @@ void lineFollow()
         {
           wheel(-turnspeedleft, turnspeedright);
           delay(80);
-          stopBot(90);
+          stopBot(100);
           break;
         }
         wheel(turnspeedleft, -turnspeedright);
@@ -117,7 +117,7 @@ void lineFollow()
         {
           wheel(turnspeedleft, -turnspeedright);
           delay(80);
-          stopBot(90);
+          stopBot(100);
           break;
         }
         wheel(-turnspeedleft, turnspeedright);
@@ -163,6 +163,9 @@ void lineFollow()
     {
       stopBot(5000);
       count = -1;
+      count1 = 0;
+      lcd.setCursor(8, 0);
+      lcd.print("  ");
     }
     count++;
   }
@@ -174,13 +177,15 @@ void lineFollow()
     else if (lastsensor == 2)
       wheel(turnspeedleft, -turnspeedright);
     else if (lastsensor == 3)
-      wheel(turnspeedleft, turnspeedright);
+      wheel(leftspeed, rightspeed);
   }
   else
   {
     digitalWrite(13, LOW);
     delspeed = (kp * error) + (kd * (error - preverror));
-    wheel(leftbasespeed + delspeed, rightbasespeed - delspeed);
+    leftspeed = leftbasespeed + delspeed;
+    rightspeed = rightbasespeed - delspeed;
+    wheel(leftspeed , rightspeed);
     preverror = error;
   }
 }
