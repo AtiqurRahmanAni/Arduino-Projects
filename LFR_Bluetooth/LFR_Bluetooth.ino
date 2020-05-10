@@ -9,15 +9,15 @@ const byte  ena = 3;
 const byte  enb = 9;
 const byte trig = 2;
 const byte eco = 13;
-const int leftbasespeed = 90; //Speed for line follow
-const int rightbasespeed = 90; //Speed for line follow
-const int maxspeed = 90; //Speed for line follow
+const int leftbasespeed = 95; //Speed for line follow
+const int rightbasespeed = 95; //Speed for line follow
+const int maxspeed = 95; //Speed for line follow
 const int turnspeedright=70; //Speed for line follow
 const int turnspeedleft=70; //Speed for line follow
 int lastsensor,num_sensor=8,i,j,threshold=450;
 int leftspeed=0,rightspeed=0;
-float kp=4;//2.50//3.1
-float kd=33;//27//30.2
+float kp=6;//2.50//3.1
+float kd=60;//27//30.2
 //For wall follow
 const int wallleftbasespeed = 55; //Speed for wall follow
 const int wallrightbasespeed = 55; //Speed for wall follow
