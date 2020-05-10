@@ -16,8 +16,8 @@ const int turnspeedright=70; //Speed for line follow
 const int turnspeedleft=70; //Speed for line follow
 int lastsensor,num_sensor=8,i,j,threshold=450;
 int leftspeed=0,rightspeed=0;
-float kp=2.50;
-float kd=27;
+float kp=4;//2.50//3.1
+float kd=33;//27//30.2
 //For wall follow
 const int wallleftbasespeed = 55; //Speed for wall follow
 const int wallrightbasespeed = 55; //Speed for wall follow
@@ -33,12 +33,12 @@ String sx="",s1="",s2="",pri="";
 char c;
 bool linecolorblack=true;
 int s[8];
-int right[]={0,2,3,4,8};
-int left[]={1,5,6,7,10,11};
-int straight[]={};
-int forwardright[]={};
-int forwardleft[]={9};
-int preverror,count=0,count1=0;
+int right[]={1,2,5,7,8,13};
+int left[]={4,10,11,12,14};
+int straight[]={6,9};
+int forwardright[]={3};
+int forwardleft[]={};
+int preverror,count=0,countnoline=0;
 int del=4500,sums=0;
 void setup() 
 {
@@ -75,6 +75,9 @@ void setup()
   lcd.setCursor(0,0);
   lcd.print("Counter:");
   lcd.print(count);
+  lcd.setCursor(0,1);
+  lcd.print("No Line:");
+  lcd.print(countnoline);
 }
 void loop() 
 {

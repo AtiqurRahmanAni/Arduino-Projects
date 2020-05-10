@@ -9,13 +9,13 @@ void lineFollow()
   error = conditions();
   if (error == 1000)
   {
+    count++;
     digitalWrite(13, HIGH);
     lcd.setCursor(8, 0);
-    lcd.print(count1);
-    count1++;
+    lcd.print(count);
     flag = 0;
     ////////////////////////////////
-    for (i = 0; i < sizeof(right)/sizeof(int); i++)
+    for (i = 0; i < sizeof(right) / sizeof(int); i++)
     {
       if (count == right[i])
       {
@@ -23,7 +23,7 @@ void lineFollow()
         break;
       }
     }
-    for (i = 0; i < sizeof(left)/sizeof(int); i++)
+    for (i = 0; i < sizeof(left) / sizeof(int); i++)
     {
       if (count == left[i])
       {
@@ -31,7 +31,7 @@ void lineFollow()
         break;
       }
     }
-    for (i = 0; i < sizeof(straight)/sizeof(int); i++)
+    for (i = 0; i < sizeof(straight) / sizeof(int); i++)
     {
       if (count == straight[i])
       {
@@ -39,7 +39,7 @@ void lineFollow()
         break;
       }
     }
-    for (i = 0; i < sizeof(forwardright)/sizeof(int); i++)
+    for (i = 0; i < sizeof(forwardright) / sizeof(int); i++)
     {
       if (count == forwardright[i])
       {
@@ -47,7 +47,7 @@ void lineFollow()
         break;
       }
     }
-    for (i = 0; i < sizeof(forwardleft)/sizeof(int); i++)
+    for (i = 0; i < sizeof(forwardleft) / sizeof(int); i++)
     {
       if (count == forwardleft[i])
       {
@@ -59,24 +59,24 @@ void lineFollow()
     //Check which direction the bot will go
     if (flag == 1)
     {
-      //turnRight(110, 400);/*First parameter is time to go forward and second is turning duration*/
-      goStraight(110);
-      wheel(0, 0);
-      delay(150);
-      while (true)
-      {
+      turnRight(110, 400);/*First parameter is time to go forward and second is turning duration*/
+      /*goStraight(110);
+        wheel(0, 0);
+        delay(150);
+        while (true)
+        {
         readLine();
         if (sums == 0 || s[3] == 1 || s[4] == 1 || ((s[3] == 0 && s[4] == 0) && (s[0] == 1 || s[7] == 1)))
           break;
         wheel(turnspeedleft, -turnspeedright);
-      }
-      while (true)
-      {
+        }
+        while (true)
+        {
         readLine();
         if (s[3] == 0 && s[4] == 0)
           break;
         wheel(turnspeedleft, -turnspeedright);
-      }
+        }*/
       while (true)
       {
         readLine();
@@ -92,24 +92,24 @@ void lineFollow()
     }
     else if (flag == 2)
     {
-      //turnLeft(110, 400); /*First parameter is time to go forward and second is turning duration*/
-      goStraight(110);
-      wheel(0, 0);
-      delay(150);
-      while (true)
-      {
+      turnLeft(110, 400); /*First parameter is time to go forward and second is turning duration*/
+      /*goStraight(110);
+        wheel(0, 0);
+        delay(150);
+        while (true)
+        {
         readLine();
         if (sums == 0 || s[3] == 1 || s[4] == 1 || ((s[3] == 0 && s[4] == 0) && (s[0] == 1 || s[7] == 1)))
           break;
         wheel(-turnspeedleft, turnspeedright);
-      }
-      while (true)
-      {
+        }
+        while (true)
+        {
         readLine();
         if (s[3] == 0 && s[4] == 0)
           break;
         wheel(-turnspeedleft, turnspeedright);
-      }
+        }*/
       while (true)
       {
         readLine();
@@ -135,7 +135,7 @@ void lineFollow()
     }
     else if (flag == 4)
     {
-      goStraight(110);
+      goStraight(50);
       wheel(0, 0);
       delay(150);
       while (true)
@@ -148,7 +148,7 @@ void lineFollow()
     }
     else if (flag == 5)
     {
-      goStraight(110);
+      //goStraight(110);
       wheel(0, 0);
       delay(150);
       while (true)
@@ -159,25 +159,53 @@ void lineFollow()
         forwardLeft(70, 0); //First parameter is speed difference and second is delay time
       }
     }
-    else if (count > 11)
+    else if (count > 14)
     {
       stopBot(5000);
-      count = -1;
-      count1 = 0;
+      count = 0;
+      countnoline=0;
       lcd.setCursor(8, 0);
-      lcd.print("  ");
+      lcd.print("0 ");
+      lcd.setCursor(8, 1);
+      lcd.print("0 ");
     }
-    count++;
   }
   else if (error == 420)
   {
     digitalWrite(13, HIGH);
+    countnoline++;
+    lcd.setCursor(8,1);
+    lcd.print(countnoline);
     if (lastsensor == 1)
-      wheel(-turnspeedleft, turnspeedright);
+    {
+      while (true)
+      {
+        readLine();
+        if (sums != 0)
+          break;
+        wheel(-turnspeedleft, turnspeedright);
+      }
+    }
     else if (lastsensor == 2)
-      wheel(turnspeedleft, -turnspeedright);
+    {
+      while (true)
+      {
+        readLine();
+        if (sums != 0)
+          break;
+        wheel(turnspeedleft, -turnspeedright);
+      }
+    }
     else if (lastsensor == 3)
-      wheel(leftspeed, rightspeed);
+    {
+      while (true)
+      {
+        readLine();
+        if (sums != 0)
+          break;
+        wheel(turnspeedleft, turnspeedright);
+      }
+    }
   }
   else
   {
