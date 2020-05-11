@@ -159,7 +159,7 @@ void lineFollow()
         forwardLeft(70, 0); //First parameter is speed difference and second is delay time
       }
     }
-    else if (count > 14)
+    else if (count > maxcount)
     {
       stopBot(5000);
       count = 0;

@@ -34,7 +34,7 @@ void forwardLeft(int diff, int del)
 }
 void stopBot(int del)
 {
-  digitalWrite(13, HIGH);
+  //digitalWrite(13, HIGH);
   wheel(0, 0);
   delay(del);
 }

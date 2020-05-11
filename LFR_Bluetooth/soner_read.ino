@@ -1,6 +1,6 @@
 void measureDistance()
 {
-  digitalWrite(trig, LOW);
+  /*digitalWrite(trig, LOW);
   delayMicroseconds(2);
   digitalWrite(trig, HIGH);
   delayMicroseconds(10);
@@ -10,5 +10,5 @@ void measureDistance()
   if(distance>=2240)
     distance=0;
   Serial.println(distance);
-  delay(500);
+  delay(500);*/
 }
