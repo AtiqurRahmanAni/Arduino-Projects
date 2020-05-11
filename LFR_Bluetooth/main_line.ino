@@ -15,7 +15,7 @@ void lineFollow()
     lcd.print(count);
     flag = 0;
     ////////////////////////////////
-    for (i = 0; i < sizeof(right) / sizeof(int); i++)
+    for (i = 0; i < nr; i++)
     {
       if (count == right[i])
       {
@@ -23,7 +23,7 @@ void lineFollow()
         break;
       }
     }
-    for (i = 0; i < sizeof(left) / sizeof(int); i++)
+    for (i = 0; i < nl; i++)
     {
       if (count == left[i])
       {
@@ -31,7 +31,7 @@ void lineFollow()
         break;
       }
     }
-    for (i = 0; i < sizeof(straight) / sizeof(int); i++)
+    for (i = 0; i < ns; i++)
     {
       if (count == straight[i])
       {
@@ -39,7 +39,7 @@ void lineFollow()
         break;
       }
     }
-    for (i = 0; i < sizeof(forwardright) / sizeof(int); i++)
+    for (i = 0; i < nfr; i++)
     {
       if (count == forwardright[i])
       {
@@ -47,7 +47,7 @@ void lineFollow()
         break;
       }
     }
-    for (i = 0; i < sizeof(forwardleft) / sizeof(int); i++)
+    for (i = 0; i < nfl; i++)
     {
       if (count == forwardleft[i])
       {
@@ -79,6 +79,8 @@ void lineFollow()
         }*/
       while (true)
       {
+        if (digitalRead(button) == LOW)
+          break;
         readLine();
         if (s[3] == 1 || s[4] == 1)
         {
@@ -112,6 +114,8 @@ void lineFollow()
         }*/
       while (true)
       {
+        if (digitalRead(button) == LOW)
+          break;
         readLine();
         if (s[3] == 1 || s[4] == 1)
         {
@@ -127,6 +131,8 @@ void lineFollow()
     {
       while (true)
       {
+        if (digitalRead(button) == LOW)
+          break;
         readLine();
         if (sums == 2 || sums == 1)
           break;
@@ -140,6 +146,8 @@ void lineFollow()
       delay(150);
       while (true)
       {
+        if (digitalRead(button) == LOW)
+          break;
         readLine();
         if (s[3] == 1 && s[5] == 0 && s[6] == 0 && s[7] == 0 && s[0] == 0 && s[1] == 0 && s[2] == 0)
           break;
@@ -153,6 +161,8 @@ void lineFollow()
       delay(150);
       while (true)
       {
+        if (digitalRead(button) == LOW)
+          break;
         readLine();
         if (s[4] == 1 && s[5] == 0 && s[6] == 0 && s[7] == 0 && s[0] == 0 && s[1] == 0 && s[2] == 0)
           break;
@@ -161,9 +171,10 @@ void lineFollow()
     }
     else if (count > maxcount)
     {
-      stopBot(5000);
+      stopBot(0);
+      dolinefollow=false;
       count = 0;
-      countnoline=0;
+      countnoline = 0;
       lcd.setCursor(8, 0);
       lcd.print("0 ");
       lcd.setCursor(8, 1);
@@ -173,13 +184,18 @@ void lineFollow()
   else if (error == 420)
   {
     digitalWrite(13, HIGH);
-    countnoline++;
-    lcd.setCursor(8,1);
-    lcd.print(countnoline);
+    if (digitalRead(button) == HIGH)
+    {
+      countnoline++;
+      lcd.setCursor(8, 1);
+      lcd.print(countnoline);
+    }
     if (lastsensor == 1)
     {
       while (true)
       {
+        if (digitalRead(button) == LOW)
+          break;
         readLine();
         if (sums != 0)
           break;
@@ -190,6 +206,8 @@ void lineFollow()
     {
       while (true)
       {
+        if (digitalRead(button) == LOW)
+          break;
         readLine();
         if (sums != 0)
           break;
@@ -200,6 +218,8 @@ void lineFollow()
     {
       while (true)
       {
+        if (digitalRead(button) == LOW)
+          break;
         readLine();
         if (sums != 0)
           break;

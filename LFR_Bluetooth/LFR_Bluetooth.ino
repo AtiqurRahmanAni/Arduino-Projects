@@ -45,6 +45,11 @@ int left[] = {4, 10, 11, 12, 14};
 int straight[] = {6, 9};
 int forwardright[] = {3};
 int forwardleft[] = {};
+int nr=sizeof(right) / sizeof(int);
+int nl=sizeof(left) / sizeof(int);
+int ns=sizeof(straight) / sizeof(int);
+int nfr=sizeof(forwardright) / sizeof(int);
+int nfl=sizeof(forwardleft) / sizeof(int);
 int preverror, count = 0, countnoline = 0, maxcount = 14;
 int del = 4500, sums = 0;
 void setup()
@@ -102,7 +107,7 @@ void loop()
       lcd.setCursor(8, 0);
       lcd.print(count);
     }
-    if (buttonpressdelay >= 300)
+    if (buttonpressdelay >= 275)
     {
       if (dolinefollow == false)
       {
