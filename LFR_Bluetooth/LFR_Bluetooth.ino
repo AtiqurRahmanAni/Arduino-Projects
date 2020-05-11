@@ -132,7 +132,7 @@ void loop()
     count++;
     lcd.setCursor(8, 0);
     lcd.print(count);
-    if (count > maxcount)
+    if (count > maxcount+1)
     {
       lcd.setCursor(8, 0);
       lcd.print("   ");
