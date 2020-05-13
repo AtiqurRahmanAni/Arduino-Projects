@@ -29,7 +29,7 @@ int setpoint = 12;
 double duration, distance;
 int wallpreverror;
 
-bool dolinefollow = false, buttonstate = false;
+bool dolinefollow = false, buttonpress = false, botStop = true;
 int flag;
 String sx = "", s1 = "", s2 = "", pri = "";
 char c;
@@ -96,7 +96,14 @@ void setup()
 }
 void loop()
 {
-  if (digitalRead(button) == LOW && buttonstate == false)
+  if (digitalRead(button) == LOW && botStop == false && buttonpress==false)
+  {
+    stopBot(0);
+    dolinefollow = false;
+    botStop = true;
+    buttonpress=true;
+  }
+  else if (digitalRead(button) == LOW && botStop == true)
   {
     buttonpressdelay++;
     if (buttonpressdelay == 200 && count != 0)
@@ -109,25 +116,17 @@ void loop()
     }
     if (buttonpressdelay >= 275)
     {
-      if (dolinefollow == false)
-      {
-        dolinefollow = true;
-        digitalWrite(13, LOW);
-        delay(200);
-        digitalWrite(13, HIGH);
-        delay(800);
-        digitalWrite(13, LOW);
-        delay(200);
-      }
-      else
-      {
-        dolinefollow = false;
-        stopBot(0);
-      }
-      buttonstate = true;
+      dolinefollow = true;
+      botStop = false;
+      digitalWrite(13, LOW);
+      delay(300);
+      digitalWrite(13, HIGH);
+      delay(800);
+      digitalWrite(13, LOW);
+      delay(200);
     }
   }
-  if (dolinefollow == false && buttonpressdelay == 10)
+  if (digitalRead(button)==LOW && buttonpress==false && botStop==true)
   {
     count++;
     lcd.setCursor(8, 0);
@@ -138,11 +137,12 @@ void loop()
       lcd.print("   ");
       count = -1;
     }
+    buttonpress=true;
   }
-  else if (digitalRead(button) == HIGH)
+  if (digitalRead(button) == HIGH)
   {
-    buttonstate = false;
     buttonpressdelay = 0;
+    buttonpress=false;
   }
   if (Serial.available())
   {
@@ -177,9 +177,7 @@ void loop()
   else
   {
     if (dolinefollow)
-    {
       lineFollow();
-    }
     //      wallFollow();
     //      readLine();
 
