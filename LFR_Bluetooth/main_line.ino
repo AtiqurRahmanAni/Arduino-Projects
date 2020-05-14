@@ -184,7 +184,7 @@ void lineFollow()
   else if (error == 420)
   {
     digitalWrite(13, HIGH);
-    if (digitalRead(button) == HIGH)
+    if (digitalRead(button) == HIGH && lastsensor==3)
     {
       countnoline++;
       lcd.setCursor(8, 1);
