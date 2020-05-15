@@ -59,7 +59,7 @@ void lineFollow()
     //Check which direction the bot will go
     if (flag == 1)
     {
-      turnRight(110, 400);/*First parameter is time to go forward and second is turning duration*/
+      turnRight(140, 400);/*First parameter is time to go forward and second is turning duration*/
       /*goStraight(110);
         wheel(0, 0);
         delay(150);
@@ -80,12 +80,15 @@ void lineFollow()
       while (true)
       {
         if (digitalRead(button) == LOW)
+        {
+          stopBot(0);
           break;
+        }
         readLine();
         if (s[3] == 1 || s[4] == 1)
         {
           wheel(-turnspeedleft, turnspeedright);
-          delay(80);
+          delay(100);
           stopBot(100);
           break;
         }
@@ -94,7 +97,7 @@ void lineFollow()
     }
     else if (flag == 2)
     {
-      turnLeft(110, 400); /*First parameter is time to go forward and second is turning duration*/
+      turnLeft(140, 400); /*First parameter is time to go forward and second is turning duration*/
       /*goStraight(110);
         wheel(0, 0);
         delay(150);
@@ -115,12 +118,15 @@ void lineFollow()
       while (true)
       {
         if (digitalRead(button) == LOW)
+        {
+          stopBot(0);
           break;
+        }
         readLine();
         if (s[3] == 1 || s[4] == 1)
         {
           wheel(turnspeedleft, -turnspeedright);
-          delay(80);
+          delay(100);
           stopBot(100);
           break;
         }
@@ -132,7 +138,10 @@ void lineFollow()
       while (true)
       {
         if (digitalRead(button) == LOW)
+        {
+          stopBot(0);
           break;
+        }
         readLine();
         if (sums == 2 || sums == 1)
           break;
@@ -147,7 +156,10 @@ void lineFollow()
       while (true)
       {
         if (digitalRead(button) == LOW)
+        {
+          stopBot(0);
           break;
+        }
         readLine();
         if (s[3] == 1 && s[5] == 0 && s[6] == 0 && s[7] == 0 && s[0] == 0 && s[1] == 0 && s[2] == 0)
           break;
@@ -162,7 +174,10 @@ void lineFollow()
       while (true)
       {
         if (digitalRead(button) == LOW)
+        {
+          stopBot(0);
           break;
+        }
         readLine();
         if (s[4] == 1 && s[5] == 0 && s[6] == 0 && s[7] == 0 && s[0] == 0 && s[1] == 0 && s[2] == 0)
           break;
@@ -195,7 +210,10 @@ void lineFollow()
       while (true)
       {
         if (digitalRead(button) == LOW)
+        {
+          stopBot(0);
           break;
+        }
         readLine();
         if (sums != 0)
           break;
@@ -207,7 +225,10 @@ void lineFollow()
       while (true)
       {
         if (digitalRead(button) == LOW)
+        {
+          stopBot(0);
           break;
+        }
         readLine();
         if (sums != 0)
           break;
@@ -219,7 +240,10 @@ void lineFollow()
       while (true)
       {
         if (digitalRead(button) == LOW)
+        {
+          stopBot(0);
           break;
+        }
         readLine();
         if (sums != 0)
           break;

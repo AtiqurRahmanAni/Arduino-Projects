@@ -1,6 +1,8 @@
 #include<LiquidCrystal_I2C.h>
 #include<Wire.h>
+#include<OneButton.h>
 LiquidCrystal_I2C lcd(0x27, 16, 2);
+OneButton btn = OneButton(2, true);
 const byte ina = 4;
 const byte  inb = 5;
 const byte  inc = 6;
@@ -29,7 +31,7 @@ int setpoint = 12;
 double duration, distance;
 int wallpreverror;
 
-bool dolinefollow = false, buttonpress = false, botStop = true;
+bool dolinefollow = false, botStop = true, doubleclk = false, singleclk = false, sensorpos = false;
 int flag;
 String sx = "", s1 = "", s2 = "", pri = "";
 char c;
@@ -52,6 +54,16 @@ int nfr = sizeof(forwardright) / sizeof(int);
 int nfl = sizeof(forwardleft) / sizeof(int);
 int preverror, count = 0, countnoline = 0, maxcount = 14;
 int del = 4500, sums = 0;
+byte customChar[] = {
+  0x1F,
+  0x1F,
+  0x1F,
+  0x1F,
+  0x1F,
+  0x1F,
+  0x1F,
+  0x1F
+};
 void setup()
 {
   pinMode(ina, OUTPUT);
@@ -71,6 +83,12 @@ void setup()
   digitalWrite(inc, LOW);
   digitalWrite(ind, LOW);
   digitalWrite(13, LOW);
+  btn.attachDoubleClick(doubleclick);
+  btn.attachClick(singleclick);
+  btn.attachLongPressStop(longclick);
+  btn.setDebounceTicks(1);
+  btn.setClickTicks(250);
+  btn.setPressTicks(500);
   lastsensor = 0;
   preverror = 0;
   lcd.init();
@@ -89,6 +107,7 @@ void setup()
   lcd.setCursor(0, 1);
   lcd.print("No Line:");
   lcd.print(countnoline);
+  lcd.createChar(0, customChar);
   /*lcd.setCursor(0, 1);
     lcd.print("kp:");
     lcd.setCursor(8, 1);
@@ -96,54 +115,7 @@ void setup()
 }
 void loop()
 {
-  if (digitalRead(button) == LOW && botStop == false && buttonpress==false)
-  {
-    stopBot(0);
-    dolinefollow = false;
-    botStop = true;
-    buttonpress=true;
-  }
-  else if (digitalRead(button) == LOW && botStop == true)
-  {
-    buttonpressdelay++;
-    if (buttonpressdelay == 200 && count != 0)
-    {
-      count--;
-      lcd.setCursor(8, 0);
-      lcd.print("  ");
-      lcd.setCursor(8, 0);
-      lcd.print(count);
-    }
-    if (buttonpressdelay >= 275)
-    {
-      dolinefollow = true;
-      botStop = false;
-      digitalWrite(13, LOW);
-      delay(300);
-      digitalWrite(13, HIGH);
-      delay(800);
-      digitalWrite(13, LOW);
-      delay(200);
-    }
-  }
-  if (digitalRead(button)==LOW && buttonpress==false && botStop==true)
-  {
-    count++;
-    lcd.setCursor(8, 0);
-    lcd.print(count);
-    if (count > maxcount + 1)
-    {
-      lcd.setCursor(8, 0);
-      lcd.print("   ");
-      count = -1;
-    }
-    buttonpress=true;
-  }
-  if (digitalRead(button) == HIGH)
-  {
-    buttonpressdelay = 0;
-    buttonpress=false;
-  }
+  btn.tick();
   if (Serial.available())
   {
     c = Serial.read();
@@ -178,9 +150,80 @@ void loop()
   {
     if (dolinefollow)
       lineFollow();
+    else if (sensorpos)
+      readLine();
     //      wallFollow();
     //      readLine();
 
   }
   delayMicroseconds(del);
+}
+void doubleclick()
+{
+  if (!dolinefollow)
+  {
+    lcd.clear();
+    doubleclk = true;
+    sensorpos = true;
+    singleclk = false;
+  }
+}
+void singleclick()
+{
+  singleclk = true;
+  stopBot(0);
+  if (dolinefollow)
+  {
+    dolinefollow = false;
+  }
+  else
+  {
+    if (doubleclk)
+    {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Counter:");
+      lcd.print(count);
+      lcd.setCursor(0, 1);
+      lcd.print("No Line:");
+      lcd.print(countnoline);
+      doubleclk = sensorpos = false;
+    }
+    else
+    {
+      count++;
+      if (count > maxcount + 1)
+      {
+        count = 0;
+        lcd.setCursor(9, 0);
+        lcd.print(" ");
+      }
+      lcd.setCursor(8, 0);
+      lcd.print(count);
+    }
+  }
+}
+void longclick()
+{
+  if (!dolinefollow)
+  {
+    dolinefollow = true;
+    if (doubleclk)
+    {
+      lcd.clear();
+      lcd.setCursor(0, 0);
+      lcd.print("Counter:");
+      lcd.print(count);
+      lcd.setCursor(0, 1);
+      lcd.print("No Line:");
+      lcd.print(countnoline);
+      doubleclk = singleclk = sensorpos = false;
+    }
+    digitalWrite(13, LOW);
+    delay(200);
+    digitalWrite(13, HIGH);
+    delay(400);
+    digitalWrite(13, LOW);
+    delay(200);
+  }
 }

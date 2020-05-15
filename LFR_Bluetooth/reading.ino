@@ -22,11 +22,28 @@ void readLine()
     }
   }
   sums = 0;
+  j=0;
   for (i = 0; i < num_sensor; i++)
   {
     sums += s[i];
-//    Serial.print(s[i]);
-//    Serial.print(" ");
+    if (sensorpos == true)
+    {
+      if (s[i] == 1)
+      {
+        lcd.setCursor(j,0);
+        lcd.print(i+1);
+        lcd.print(" ");
+      }
+      else
+      {
+        lcd.setCursor(j,0);
+        lcd.write(0);
+        lcd.print(" ");
+      }
+      j+=2;
+    }
+    //    Serial.print(s[i]);
+    //    Serial.print(" ");
   }
-//  Serial.println("");
+  //  Serial.println("");
 }
