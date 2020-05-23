@@ -64,6 +64,18 @@ byte customChar[] = {
   0x1F,
   0x1F
 };
+int conditions();
+void lineFollow();
+void wallFollow();
+void wheel(int leftspeed, int rightspeed);
+void readLine();
+void measureDistance();
+void turnRight(int del1, int del2);
+void turnLeft(int del1, int del2);
+void goStraight(int del1);
+void forwardRight(int diff, int del);
+void forwardLeft(int diff, int del);
+void stopBot(int del);
 void setup()
 {
   pinMode(ina, OUTPUT);

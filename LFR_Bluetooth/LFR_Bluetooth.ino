@@ -20,7 +20,7 @@ long long buttonpressdelay = 0;
 int lastsensor, num_sensor = 8, i, j, threshold = 450;
 int leftspeed = 0, rightspeed = 0;
 float kp = 6; //4
-float kd = 60; //33
+float kd = 55; //33
 //For wall follow
 const int wallleftbasespeed = 55; //Speed for wall follow
 const int wallrightbasespeed = 55; //Speed for wall follow
@@ -64,6 +64,18 @@ byte customChar[] = {
   0x1F,
   0x1F
 };
+int conditions();
+void lineFollow();
+void wallFollow();
+void wheel(int leftspeed, int rightspeed);
+void readLine();
+void measureDistance();
+void turnRight(int del1, int del2);
+void turnLeft(int del1, int del2);
+void goStraight(int del1);
+void forwardRight(int diff, int del);
+void forwardLeft(int diff, int del);
+void stopBot(int del);
 void setup()
 {
   pinMode(ina, OUTPUT);
@@ -115,6 +127,11 @@ void setup()
 }
 void loop()
 {
+  if (digitalRead(button) == LOW && dolinefollow)
+  {
+    dolinefollow=false;
+    stopBot(0);
+  }
   btn.tick();
   if (Serial.available())
   {
@@ -172,35 +189,28 @@ void singleclick()
 {
   singleclk = true;
   stopBot(0);
-  if (dolinefollow)
+  if (doubleclk)
   {
-    dolinefollow = false;
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Counter:");
+    lcd.print(count);
+    lcd.setCursor(0, 1);
+    lcd.print("No Line:");
+    lcd.print(countnoline);
+    doubleclk = sensorpos = false;
   }
   else
   {
-    if (doubleclk)
+    count++;
+    if (count > maxcount + 1)
     {
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("Counter:");
-      lcd.print(count);
-      lcd.setCursor(0, 1);
-      lcd.print("No Line:");
-      lcd.print(countnoline);
-      doubleclk = sensorpos = false;
+      count = 0;
+      lcd.setCursor(9, 0);
+      lcd.print(" ");
     }
-    else
-    {
-      count++;
-      if (count > maxcount + 1)
-      {
-        count = 0;
-        lcd.setCursor(9, 0);
-        lcd.print(" ");
-      }
-      lcd.setCursor(8, 0);
-      lcd.print(count);
-    }
+    lcd.setCursor(8, 0);
+    lcd.print(count);
   }
 }
 void longclick()
