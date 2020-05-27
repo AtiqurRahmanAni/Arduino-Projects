@@ -101,10 +101,11 @@ void lineFollow()
     }
     else if (flag == 5)
     {
-      //goStraight(110);
+      //goStraight(50, 120);
       wheel(0, 0);
       delay(80);
-      while (true)
+      forwardLeft(100, 500);
+      /*while (true)
       {
         if (digitalRead(button) == LOW)
         {
@@ -114,8 +115,8 @@ void lineFollow()
         readLine();
         if (s[4] == 1 && (s[5] + s[6] + s[7] + s[0] + s[1] + s[2]) == 0)
           break;
-        forwardLeft(90, 0); //First parameter is speed difference and second is delay time
-      }
+        forwardLeft(100, 0); //First parameter is speed difference and second is delay time
+      }*/
     }
     else if (count > maxcount)
     {

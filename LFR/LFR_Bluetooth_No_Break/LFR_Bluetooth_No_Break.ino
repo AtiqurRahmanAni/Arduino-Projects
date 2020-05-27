@@ -42,11 +42,11 @@ int s[8];
   int straight[] = {6, 9};
   int forwardright[] = {};
   int forwardleft[] = {12};*/
-int right[] = {1, 2, 5, 6, 7, 11};
-int left[] = {4, 8, 9, 10, 12};
+int right[] = {1, 2, 4, 6, 7, 11};
+int left[] = {5, 8, 9, 10, 12};
 int straight[] = {};
-int forwardright[] = {3};
-int forwardleft[] = {};
+int forwardright[] = {};
+int forwardleft[] = {3};
 int nr = sizeof(right) / sizeof(int);
 int nl = sizeof(left) / sizeof(int);
 int ns = sizeof(straight) / sizeof(int);
