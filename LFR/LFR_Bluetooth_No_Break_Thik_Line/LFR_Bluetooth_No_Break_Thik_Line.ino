@@ -52,9 +52,9 @@ int nl = sizeof(left) / sizeof(int);
 int ns = sizeof(straight) / sizeof(int);
 int nfr = sizeof(forwardright) / sizeof(int);
 int nfl = sizeof(forwardleft) / sizeof(int);
-int preverror, count = 0, countnoline = 0, maxcount = 13;
+int preverror, count = 0, maxcount = 12;
 int del = 4500, sums = 0;
-char minimum[4], maximum[4];
+char minimum[4], maximum[4], countstring[3];
 int mini = 10000, maxi, temp;
 byte customChar[] = {
   0x1F,
@@ -74,7 +74,7 @@ void readLine();
 void measureDistance();
 void turnRight(int del1, int del2);
 void turnLeft(int del1, int del2);
-void goStraight(int del1);
+void goStraight(int del1,int wheelspeed);
 void forwardRight(int diff, int del);
 void forwardLeft(int diff, int del);
 void stopBot(int del);
@@ -112,16 +112,14 @@ void setup()
   lcd.print("Line");
   lcd.setCursor(4, 1);
   lcd.print("Follower");
-  Serial.begin(9600);
-  delay(1000);
+  delay(750);
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Counter:");
-  lcd.print(count);
-  lcd.setCursor(0, 1);
-  lcd.print("No Line:");
-  lcd.print(countnoline);
+  sprintf(countstring, "%2d", count);
+  lcd.print(countstring);
   lcd.createChar(0, customChar);
+  Serial.begin(9600);
 }
 void loop()
 {
@@ -178,9 +176,6 @@ void loop()
       maxi = 0;
       readLine();
     }
-    //      wallFollow();
-    //      readLine();
-
   }
   delayMicroseconds(del);
 }
@@ -207,10 +202,8 @@ void singleclick()
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Counter:");
-    lcd.print(count);
-    lcd.setCursor(0, 1);
-    lcd.print("No Line:");
-    lcd.print(countnoline);
+    sprintf(countstring, "%2d", count);
+    lcd.print(countstring);
     doubleclk = sensorpos = false;
   }
   else
@@ -219,11 +212,13 @@ void singleclick()
     if (count > maxcount + 1)
     {
       count = 0;
-      lcd.setCursor(9, 0);
-      lcd.print(" ");
+      sprintf(countstring, "%2d", count);
+      lcd.setCursor(8, 0);
+      lcd.print(countstring);
     }
+    sprintf(countstring, "%2d", count);
     lcd.setCursor(8, 0);
-    lcd.print(count);
+    lcd.print(countstring);
   }
 }
 void longclick()
@@ -236,10 +231,8 @@ void longclick()
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("Counter:");
-      lcd.print(count);
-      lcd.setCursor(0, 1);
-      lcd.print("No Line:");
-      lcd.print(countnoline);
+      sprintf(countstring, "%2d", count);
+      lcd.print(countstring);
       doubleclk = singleclk = sensorpos = false;
     }
     digitalWrite(13, LOW);

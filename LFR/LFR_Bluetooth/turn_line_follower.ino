@@ -4,7 +4,6 @@ void turnRight(int del1, int del2)
   delay(del1);
   wheel(0, 0);
   delay(150);
-  readLine();
   wheel(turnspeedleft, -turnspeedright);
   delay(del2);
 }
@@ -17,9 +16,9 @@ void turnLeft(int del1, int del2)
   wheel(-turnspeedleft, turnspeedright);
   delay(del2);
 }
-void goStraight(int del1)
+void goStraight(int del1,int wheelspeed)
 {
-  wheel(turnspeedleft,turnspeedright);
+  wheel(wheelspeed,wheelspeed);
   delay(del1);
 }
 void forwardRight(int diff, int del)

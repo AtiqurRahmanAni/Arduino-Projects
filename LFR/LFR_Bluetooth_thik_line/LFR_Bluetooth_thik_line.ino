@@ -11,16 +11,16 @@ const byte  ena = 3;
 const byte  enb = 9;
 const byte button = 2;
 const byte eco = 13;
-const int leftbasespeed = 95; //Speed for line follow
-const int rightbasespeed = 95; //Speed for line follow
-const int maxspeed = 95; //Speed for line follow
-const int turnspeedright = 70; //Speed for line follow
-const int turnspeedleft = 70; //Speed for line follow
+const int leftbasespeed = 150; //Speed for line follow
+const int rightbasespeed = 150; //Speed for line follow
+const int maxspeed = 170; //Speed for line follow
+const int turnspeedright = 100; //Speed for line follow
+const int turnspeedleft = 100; //Speed for line follow
 long long buttonpressdelay = 0;
 int lastsensor, num_sensor = 8, i, j, threshold = 450;
 int leftspeed = 0, rightspeed = 0;
-float kp = 6; //4
-float kd = 60; //33
+float kp = 6.20; //4
+float kd = 90; //33
 //For wall follow
 const int wallleftbasespeed = 55; //Speed for wall follow
 const int wallrightbasespeed = 55; //Speed for wall follow
@@ -31,9 +31,9 @@ int setpoint = 12;
 double duration, distance;
 int wallpreverror;
 
-bool dolinefollow = false, botStop = true, doubleclk = false, singleclk = false, sensorpos = false;
+bool dolinefollow = false, botStop = true, doubleclk = false, singleclk = false, sensorpos = false, tune = false, stopflag = false;
 int flag;
-String sx = "", s1 = "", s2 = "", pri = "";
+String sx = "", s1 = "";
 char c;
 bool linecolorblack = true;
 int s[8];
@@ -42,9 +42,9 @@ int s[8];
   int straight[] = {6, 9};
   int forwardright[] = {};
   int forwardleft[] = {12};*/
-int right[] = {1, 2, 5, 7, 8, 13};
-int left[] = {4, 10, 11, 12, 14};
-int straight[] = {6, 9};
+int right[] = {1, 2, 5, 6, 7, 11};
+int left[] = {4, 8, 9, 10, 12};
+int straight[] = {};
 int forwardright[] = {3};
 int forwardleft[] = {};
 int nr = sizeof(right) / sizeof(int);
@@ -52,8 +52,10 @@ int nl = sizeof(left) / sizeof(int);
 int ns = sizeof(straight) / sizeof(int);
 int nfr = sizeof(forwardright) / sizeof(int);
 int nfl = sizeof(forwardleft) / sizeof(int);
-int preverror, count = 0, countnoline = 0, maxcount = 14;
+int preverror, count = 0, maxcount = 12;
 int del = 4500, sums = 0;
+char minimum[4], maximum[4], countstring[3];
+int mini = 10000, maxi, temp;
 byte customChar[] = {
   0x1F,
   0x1F,
@@ -72,7 +74,7 @@ void readLine();
 void measureDistance();
 void turnRight(int del1, int del2);
 void turnLeft(int del1, int del2);
-void goStraight(int del1);
+void goStraight(int del1,int wheelspeed);
 void forwardRight(int diff, int del);
 void forwardLeft(int diff, int del);
 void stopBot(int del);
@@ -110,23 +112,22 @@ void setup()
   lcd.print("Line");
   lcd.setCursor(4, 1);
   lcd.print("Follower");
-  Serial.begin(9600);
-  delay(1000);
+  delay(750);
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Counter:");
-  lcd.print(count);
-  lcd.setCursor(0, 1);
-  lcd.print("No Line:");
-  lcd.print(countnoline);
+  sprintf(countstring, "%2d", count);
+  lcd.print(countstring);
   lcd.createChar(0, customChar);
-  /*lcd.setCursor(0, 1);
-    lcd.print("kp:");
-    lcd.setCursor(8, 1);
-    lcd.print("kd:");*/
+  Serial.begin(9600);
 }
 void loop()
 {
+  if (digitalRead(button) == LOW && dolinefollow)
+  {
+    dolinefollow = false;
+    stopBot(0);
+  }
   btn.tick();
   if (Serial.available())
   {
@@ -138,20 +139,27 @@ void loop()
         for (i = 0; sx[i] != '@'; i++)
           s1 += sx[i];
         kp = s1.toDouble();
+        s1 = "";
         i++;
         for (; i < sx.length(); i++)
-          s2 += sx[i];
-        kd = s2.toDouble();
-        sx = s1 = s2 = "";
-        lcd.setCursor(3, 1);
-        lcd.print("    ");
-        lcd.setCursor(11, 1);
-        lcd.print("    ");
-        lcd.setCursor(3, 1);
+          s1 += sx[i];
+        kd = s1.toDouble();
+        sx = s1 = "";
+        lcd.clear();
+        lcd.print("kp:");
+        lcd.setCursor(3, 0);
+        lcd.print("     ");
+        lcd.setCursor(3, 0);
         lcd.print(kp);
-        lcd.setCursor(11, 1);
+        lcd.setCursor(0, 1);
+        lcd.print("kd:");
+        lcd.setCursor(3, 1);
+        lcd.print("     ");
+        lcd.setCursor(3, 1);
         lcd.print(kd);
-        stopBot(3500);
+        stopBot(0);
+        tune = true;
+        dolinefollow = false;
         //Serial.println(del);
       }
     }
@@ -163,10 +171,11 @@ void loop()
     if (dolinefollow)
       lineFollow();
     else if (sensorpos)
+    {
+      mini = 10000;
+      maxi = 0;
       readLine();
-    //      wallFollow();
-    //      readLine();
-
+    }
   }
   delayMicroseconds(del);
 }
@@ -175,6 +184,10 @@ void doubleclick()
   if (!dolinefollow)
   {
     lcd.clear();
+    lcd.setCursor(0, 1);
+    lcd.print("Min:");
+    lcd.setCursor(8, 1);
+    lcd.print("Max:");
     doubleclk = true;
     sensorpos = true;
     singleclk = false;
@@ -184,35 +197,28 @@ void singleclick()
 {
   singleclk = true;
   stopBot(0);
-  if (dolinefollow)
+  if (doubleclk)
   {
-    dolinefollow = false;
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Counter:");
+    sprintf(countstring, "%2d", count);
+    lcd.print(countstring);
+    doubleclk = sensorpos = false;
   }
   else
   {
-    if (doubleclk)
+    count++;
+    if (count > maxcount + 1)
     {
-      lcd.clear();
-      lcd.setCursor(0, 0);
-      lcd.print("Counter:");
-      lcd.print(count);
-      lcd.setCursor(0, 1);
-      lcd.print("No Line:");
-      lcd.print(countnoline);
-      doubleclk = sensorpos = false;
-    }
-    else
-    {
-      count++;
-      if (count > maxcount + 1)
-      {
-        count = 0;
-        lcd.setCursor(9, 0);
-        lcd.print(" ");
-      }
+      count = 0;
+      sprintf(countstring, "%2d", count);
       lcd.setCursor(8, 0);
-      lcd.print(count);
+      lcd.print(countstring);
     }
+    sprintf(countstring, "%2d", count);
+    lcd.setCursor(8, 0);
+    lcd.print(countstring);
   }
 }
 void longclick()
@@ -220,15 +226,13 @@ void longclick()
   if (!dolinefollow)
   {
     dolinefollow = true;
-    if (doubleclk)
+    if (doubleclk || tune)
     {
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("Counter:");
-      lcd.print(count);
-      lcd.setCursor(0, 1);
-      lcd.print("No Line:");
-      lcd.print(countnoline);
+      sprintf(countstring, "%2d", count);
+      lcd.print(countstring);
       doubleclk = singleclk = sensorpos = false;
     }
     digitalWrite(13, LOW);

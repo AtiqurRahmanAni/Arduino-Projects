@@ -9,10 +9,11 @@ void lineFollow()
   error = conditions();
   if (error == 1000)
   {
-    count++;
     digitalWrite(13, HIGH);
+    count++;
+    sprintf(countstring, "%2d", count);
     lcd.setCursor(8, 0);
-    lcd.print(count);
+    lcd.print(countstring);
     flag = 0;
     ////////////////////////////////
     for (i = 0; i < nr; i++)
@@ -59,24 +60,7 @@ void lineFollow()
     //Check which direction the bot will go
     if (flag == 1)
     {
-      turnRight(140, 400);/*First parameter is time to go forward and second is turning duration*/
-      /*goStraight(110);
-        wheel(0, 0);
-        delay(150);
-        while (true)
-        {
-        readLine();
-        if (sums == 0 || s[3] == 1 || s[4] == 1 || ((s[3] == 0 && s[4] == 0) && (s[0] == 1 || s[7] == 1)))
-          break;
-        wheel(turnspeedleft, -turnspeedright);
-        }
-        while (true)
-        {
-        readLine();
-        if (s[3] == 0 && s[4] == 0)
-          break;
-        wheel(turnspeedleft, -turnspeedright);
-        }*/
+      turnRight(45, 200);/*First parameter is time to go forward and second is turning duration*/
       while (true)
       {
         if (digitalRead(button) == LOW)
@@ -88,8 +72,8 @@ void lineFollow()
         if (s[3] == 1 || s[4] == 1)
         {
           wheel(-turnspeedleft, turnspeedright);
-          delay(100);
-          stopBot(100);
+          delay(80);
+          stopBot(80);
           break;
         }
         wheel(turnspeedleft, -turnspeedright);
@@ -97,24 +81,7 @@ void lineFollow()
     }
     else if (flag == 2)
     {
-      turnLeft(140, 400); /*First parameter is time to go forward and second is turning duration*/
-      /*goStraight(110);
-        wheel(0, 0);
-        delay(150);
-        while (true)
-        {
-        readLine();
-        if (sums == 0 || s[3] == 1 || s[4] == 1 || ((s[3] == 0 && s[4] == 0) && (s[0] == 1 || s[7] == 1)))
-          break;
-        wheel(-turnspeedleft, turnspeedright);
-        }
-        while (true)
-        {
-        readLine();
-        if (s[3] == 0 && s[4] == 0)
-          break;
-        wheel(-turnspeedleft, turnspeedright);
-        }*/
+      turnLeft(45, 200); /*First parameter is time to go forward and second is turning duration*/
       while (true)
       {
         if (digitalRead(button) == LOW)
@@ -126,8 +93,8 @@ void lineFollow()
         if (s[3] == 1 || s[4] == 1)
         {
           wheel(turnspeedleft, -turnspeedright);
-          delay(100);
-          stopBot(100);
+          delay(80);
+          stopBot(80);
           break;
         }
         wheel(-turnspeedleft, turnspeedright);
@@ -145,14 +112,14 @@ void lineFollow()
         readLine();
         if (sums == 2 || sums == 1)
           break;
-        goStraight(0);
+        goStraight(0,120);
       }
     }
     else if (flag == 4)
     {
-      goStraight(50);
+      goStraight(30,100);
       wheel(0, 0);
-      delay(150);
+      delay(80);
       while (true)
       {
         if (digitalRead(button) == LOW)
@@ -161,16 +128,15 @@ void lineFollow()
           break;
         }
         readLine();
-        if (s[3] == 1 && s[5] == 0 && s[6] == 0 && s[7] == 0 && s[0] == 0 && s[1] == 0 && s[2] == 0)
+        if (s[3] == 1 && (s[5]+s[6]+s[7]+s[0]+s[1]+s[2]) == 0)
           break;
-        forwardRight(70, 0); //First parameter is speed difference and second is delay time
+        forwardRight(90, 0); //First parameter is speed difference and second is delay time
       }
     }
     else if (flag == 5)
     {
-      //goStraight(110);
       wheel(0, 0);
-      delay(150);
+      delay(80);
       while (true)
       {
         if (digitalRead(button) == LOW)
@@ -179,7 +145,7 @@ void lineFollow()
           break;
         }
         readLine();
-        if (s[4] == 1 && s[5] == 0 && s[6] == 0 && s[7] == 0 && s[0] == 0 && s[1] == 0 && s[2] == 0)
+        if (s[4] == 1 && (s[5]+s[6]+s[7]+s[0]+s[1]+s[2]) == 0)
           break;
         forwardLeft(70, 0); //First parameter is speed difference and second is delay time
       }
@@ -187,24 +153,16 @@ void lineFollow()
     else if (count > maxcount)
     {
       stopBot(0);
-      dolinefollow=false;
+      dolinefollow = stopflag = false;
       count = 0;
-      countnoline = 0;
+      sprintf(countstring, "%2d", count);
       lcd.setCursor(8, 0);
-      lcd.print("0 ");
-      lcd.setCursor(8, 1);
-      lcd.print("0 ");
+      lcd.print(countstring);
     }
   }
   else if (error == 420)
   {
     digitalWrite(13, HIGH);
-    if (digitalRead(button) == HIGH && lastsensor==3)
-    {
-      countnoline++;
-      lcd.setCursor(8, 1);
-      lcd.print(countnoline);
-    }
     if (lastsensor == 1)
     {
       while (true)
@@ -247,7 +205,7 @@ void lineFollow()
         readLine();
         if (sums != 0)
           break;
-        wheel(turnspeedleft, turnspeedright);
+        goStraight(0,120);
       }
     }
   }
