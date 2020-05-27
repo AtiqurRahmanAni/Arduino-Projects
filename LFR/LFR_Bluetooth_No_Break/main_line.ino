@@ -9,10 +9,11 @@ void lineFollow()
   error = conditions();
   if (error == 1000)
   {
-    count++;
     digitalWrite(13, HIGH);
+    count++;
+    sprintf(countstring, "%2d", count);
     lcd.setCursor(8, 0);
-    lcd.print(count);
+    lcd.print(countstring);
     flag = 0;
     ////////////////////////////////
     for (i = 0; i < nr; i++)
@@ -60,78 +61,10 @@ void lineFollow()
     if (flag == 1)
     {
       turnRight(55, 350);/*First parameter is time to go forward and second is turning duration*/
-      /*goStraight(110);
-        wheel(0, 0);
-        delay(150);
-        while (true)
-        {
-        readLine();
-        if (sums == 0 || s[3] == 1 || s[4] == 1 || ((s[3] == 0 && s[4] == 0) && (s[0] == 1 || s[7] == 1)))
-          break;
-        wheel(turnspeedleft, -turnspeedright);
-        }
-        while (true)
-        {
-        readLine();
-        if (s[3] == 0 && s[4] == 0)
-          break;
-        wheel(turnspeedleft, -turnspeedright);
-        }*/
-      /*while (true)
-      {
-        if (digitalRead(button) == LOW)
-        {
-          stopBot(0);
-          break;
-        }
-        readLine();
-        if (s[3] == 1 || s[4] == 1)
-        {
-          wheel(-turnspeedleft, turnspeedright);
-          delay(100);
-          stopBot(100);
-          break;
-        }
-        wheel(turnspeedleft, -turnspeedright);
-      }*/
     }
     else if (flag == 2)
     {
       turnLeft(55, 350); /*First parameter is time to go forward and second is turning duration*/
-      /*goStraight(110);
-        wheel(0, 0);
-        delay(150);
-        while (true)
-        {
-        readLine();
-        if (sums == 0 || s[3] == 1 || s[4] == 1 || ((s[3] == 0 && s[4] == 0) && (s[0] == 1 || s[7] == 1)))
-          break;
-        wheel(-turnspeedleft, turnspeedright);
-        }
-        while (true)
-        {
-        readLine();
-        if (s[3] == 0 && s[4] == 0)
-          break;
-        wheel(-turnspeedleft, turnspeedright);
-        }*/
-      /*while (true)
-      {
-        if (digitalRead(button) == LOW)
-        {
-          stopBot(0);
-          break;
-        }
-        readLine();
-        if (s[3] == 1 || s[4] == 1)
-        {
-          wheel(turnspeedleft, -turnspeedright);
-          delay(100);
-          stopBot(100);
-          break;
-        }
-        wheel(-turnspeedleft, turnspeedright);
-      }*/
     }
     else if (flag == 3)
     {
@@ -145,12 +78,12 @@ void lineFollow()
         readLine();
         if (sums == 2 || sums == 1)
           break;
-        goStraight(0,120);
+        goStraight(0, 120);
       }
     }
     else if (flag == 4)
     {
-      goStraight(50,120);
+      goStraight(50, 120);
       wheel(0, 0);
       delay(80);
       while (true)
@@ -161,7 +94,7 @@ void lineFollow()
           break;
         }
         readLine();
-        if (s[3] == 1 && s[5] == 0 && s[6] == 0 && s[7] == 0 && s[0] == 0 && s[1] == 0 && s[2] == 0)
+        if (s[3] == 1 && (s[5] + s[6] + s[7] + s[0] + s[1] + s[2]) == 0)
           break;
         forwardRight(90, 0); //First parameter is speed difference and second is delay time
       }
@@ -170,7 +103,7 @@ void lineFollow()
     {
       //goStraight(110);
       wheel(0, 0);
-      delay(90);
+      delay(80);
       while (true)
       {
         if (digitalRead(button) == LOW)
@@ -179,7 +112,7 @@ void lineFollow()
           break;
         }
         readLine();
-        if (s[4] == 1 && s[5] == 0 && s[6] == 0 && s[7] == 0 && s[0] == 0 && s[1] == 0 && s[2] == 0)
+        if (s[4] == 1 && (s[5] + s[6] + s[7] + s[0] + s[1] + s[2]) == 0)
           break;
         forwardLeft(90, 0); //First parameter is speed difference and second is delay time
       }
@@ -188,78 +121,25 @@ void lineFollow()
     {
       X:
       stopBot(0);
-      dolinefollow=stopflag=false;
+      dolinefollow = stopflag = false;
       count = 0;
-      countnoline = 0;
+      sprintf(countstring, "%2d", count);
       lcd.setCursor(8, 0);
-      lcd.print("0 ");
-      lcd.setCursor(8, 1);
-      lcd.print("0 ");
+      lcd.print(countstring);
     }
   }
   else if (error == 420)
   {
     digitalWrite(13, HIGH);
-    if(stopflag)
+    if (stopflag)
     {
       goto X;
     }
-    /*if (digitalRead(button) == HIGH && lastsensor==3)
-    {
-      countnoline++;
-      lcd.setCursor(8, 1);
-      lcd.print(countnoline);
-    }
-    if (lastsensor == 1)
-    {
-      while (true)
-      {
-        if (digitalRead(button) == LOW)
-        {
-          stopBot(0);
-          break;
-        }
-        readLine();
-        if (sums != 0)
-          break;
-        wheel(-turnspeedleft, turnspeedright);
-      }
-    }
-    else if (lastsensor == 2)
-    {
-      while (true)
-      {
-        if (digitalRead(button) == LOW)
-        {
-          stopBot(0);
-          break;
-        }
-        readLine();
-        if (sums != 0)
-          break;
-        wheel(turnspeedleft, -turnspeedright);
-      }
-    }
-    else if (lastsensor == 3)
-    {
-      while (true)
-      {
-        if (digitalRead(button) == LOW)
-        {
-          stopBot(0);
-          break;
-        }
-        readLine();
-        if (sums != 0)
-          break;
-        wheel(turnspeedleft, turnspeedright);
-      }
-    }*/
   }
   else
   {
     digitalWrite(13, LOW);
-    if(count==14)
+    if (count == 14)
     {
       //stopflag=true;
     }

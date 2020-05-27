@@ -4,7 +4,6 @@ void turnRight(int del1, int del2)
   delay(del1);
   wheel(0, 0);
   delay(150);
-  readLine();
   wheel(turnspeedleft, -turnspeedright);
   delay(del2);
 }
