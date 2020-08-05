@@ -9,7 +9,7 @@ void lineFollow()
   error = conditions();
   if (error == 1000)
   {
-    digitalWriteFast(led, HIGH);
+    digitalWrite(led, HIGH);
     count++;
     sprintf(countstring, "%2d", count);
     lcd.setCursor(8, 0);
@@ -64,13 +64,13 @@ void lineFollow()
     }
     else if (flag == 2)
     {
-      turnLeft(30, 300); /*First parameter is time to go forward and second is turning duration*/
+      turnLeft(30, 280); /*First parameter is time to go forward and second is turning duration*/
     }
     else if (flag == 3)
     {
       while (true)
       {
-        if (digitalReadFast(button) == LOW)
+        if (digitalRead(button) == LOW)
         {
           stopBot(0);
           break;
@@ -83,21 +83,21 @@ void lineFollow()
     }
     else if (flag == 4)
     {
-      goStraight(40, 150);
+      goStraight(40, turnspeedright);
       wheel(0, 0);
       delay(80);
-      forwardRight(150, 150);
+      forwardRight(turnspeedright, 150);
     }
     else if (flag == 5)
     {
-      goStraight(15, 150);
+      goStraight(15, turnspeedright);
       wheel(0, 0);
       delay(80);
-      forwardLeft(150, 100);
+      forwardLeft(turnspeedright, 150);
     }
     else if (count > maxcount)
     {
-      X:
+X:
       stopBot(0);
       dolinefollow = stopflag = false;
       count = 0;
@@ -108,7 +108,7 @@ void lineFollow()
   }
   else if (error == 420)
   {
-    digitalWriteFast(led, HIGH);
+    digitalWrite(led, HIGH);
     if (stopflag)
     {
       goto X;
@@ -116,11 +116,11 @@ void lineFollow()
   }
   else
   {
-    digitalWriteFast(led, LOW);
-    if (count == 14)
-    {
+    digitalWrite(led, LOW);
+    /*if (count == 14)
+      {
       stopflag=true;
-    }
+      }*/
     delspeed = (kp * error) + (kd * (error - preverror));
     leftspeed = leftbasespeed + delspeed;
     rightspeed = rightbasespeed - delspeed;

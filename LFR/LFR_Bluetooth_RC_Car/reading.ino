@@ -1,16 +1,18 @@
 void readLine()
 {
-  s[0] = digitalReadFast(sen1);
-  s[1] = digitalReadFast(sen2);
-  s[6] = digitalReadFast(sen7);
-  s[7] = digitalReadFast(sen8);
-  for (i = 0; i < 4; i++)
+  s[0] = !digitalRead(sen1);
+  s[7] = !digitalRead(sen8);
+  j=1;
+  for (i = 0; i < 8; i++)
   {
+    if (i == 4 || i == 5)
+      continue;
     temp = analogRead(i);
     if (temp < threshold)
-      s[i + 2] = true;
+      s[j] = true;
     else
-      s[i + 2] = false;
+      s[j] = false;
+    j++;
     if (sensorpos)
     {
       if (temp > maxi)
@@ -19,13 +21,14 @@ void readLine()
         mini = temp;
     }
   }
-  sums = 0;
+  sums = decimal = 0;
   j = 0;
   for (i = 0; i < num_sensor; i++)
   {
     if (!linecolorblack)
       s[i] = !s[i];
     sums += s[i];
+    decimal += (s[i]*(1<<i));
     if (sensorpos)
     {
       if (s[i] == 1)
@@ -42,10 +45,7 @@ void readLine()
       }
       j += 2;
     }
-    //    Serial.print(s[i]);
-    //    Serial.print(" ");
   }
-  //  Serial.println("");
   if (sensorpos)
   {
     sprintf(minimum, "%3d", mini);
