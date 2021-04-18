@@ -95,6 +95,10 @@ void clearSerialBuffer()
 }
 void motorDrive()
 {
+//  Serial.print("X: ");
+//  Serial.println(x);
+//  Serial.print("Y: ");
+//  Serial.println(y);
   if (y == 512)
   {
     if (x == 512)
