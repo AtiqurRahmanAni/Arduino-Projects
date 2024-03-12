@@ -3,13 +3,14 @@ const int R_PWM1 = 9;
 
 const int L_PWM2 = 10;
 const int R_PWM2 = 11;
+
 char ch;
 int x=100;
 void setup() 
 {
   pinMode(L_PWM1,OUTPUT);  
-  pinMode(R_PWM1,OUTPUT); 
-  
+  pinMode(R_PWM1,OUTPUT);
+   
   pinMode(L_PWM2,OUTPUT);  
   pinMode(R_PWM2,OUTPUT);
   
@@ -18,6 +19,7 @@ void setup()
   
   digitalWrite(L_PWM2,LOW);
   digitalWrite(R_PWM2,LOW);
+  
   Serial.begin(9600);
 }
 

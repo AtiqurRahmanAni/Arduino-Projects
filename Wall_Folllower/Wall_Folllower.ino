@@ -22,8 +22,7 @@ char c;
 int lasterror, setpoint = 12, i;
 float error;
 int delspeed;
-void setup()
-{
+void setup() {
   pinMode(ina, OUTPUT);
   pinMode(inb, OUTPUT);
   pinMode(inc, OUTPUT);
@@ -49,14 +48,10 @@ void setup()
 
 void loop() {
 
-  if (Serial.available())
-  {
-    {
+  if (Serial.available()) {
       handleSerial(Serial.peek());
-    }
   }
-  while (digitalRead(obstacle) == HIGH)
-  {
+  while (digitalRead(obstacle) == HIGH) {
     turn();
   }
   digitalWrite(trig, LOW);
@@ -70,44 +65,33 @@ void loop() {
   //    Serial.print(distance);
   //    Serial.println(" cm");
   error = distance - setpoint;
-  integral += error;
+  // integral += error;
   delspeed = (kp * error) + (kd * (error - preverror));
   wheel(leftbasespeed + delspeed, rightbasespeed - delspeed);
   preverror = error;
   delayMicroseconds(600);
 }
-void wheel(int leftspeed, int rightspeed)
-{
+void wheel(int leftspeed, int rightspeed) {
   //    Serial.print(leftspeed);
   //    Serial.print(' ');
   //    Serial.println(rightspeed);
-  if (leftspeed == 0)
-  {
+  if (leftspeed == 0) {
     digitalWrite(inc, LOW);
     digitalWrite(ind, LOW);
-  }
-  else if (leftspeed > 0)
-  {
+  } else if (leftspeed > 0) {
     digitalWrite(inc, LOW);
     digitalWrite(ind, HIGH);
-  }
-  else if (leftspeed < 0)
-  {
+  } else if (leftspeed < 0) {
     digitalWrite(inc, 1);
     digitalWrite(ind, LOW);
   }
-  if (rightspeed == 0)
-  {
+  if (rightspeed == 0) {
     digitalWrite(ina, LOW);
     digitalWrite(inb, LOW);
-  }
-  else if (rightspeed > 0)
-  {
+  } else if (rightspeed > 0) {
     digitalWrite(inb, LOW);
     digitalWrite(ina, HIGH);
-  }
-  else if (rightspeed < 0)
-  {
+  } else if (rightspeed < 0) {
     digitalWrite(ina, LOW);
     digitalWrite(inb, HIGH);
   }
@@ -118,58 +102,49 @@ void wheel(int leftspeed, int rightspeed)
   analogWrite(ena, abs(rightspeed));
   analogWrite(enb, abs(leftspeed));
 }
-void handleSerial(char c)
-{
-  switch (c)
-  {
+void handleSerial(char c) {
+
+  switch (c) {
     case 'P':
       {
         if (Serial.available() < KP_PACKET_SIZE)
           break;
-        kp = Serial.parseFloat();
-        if (Serial.read() == 13)
-        {
-          if (Serial.read() == 10)
-          {
+        if (Serial.read() == 13) {
+          if (Serial.read() == 10) {
+            kp = Serial.parseFloat();
             Serial.print("KP: ");
             Serial.println(kp);
-          }
-          else
+          } else
             clearSerialBuffer();
-        }
-        else
+        } else
           clearSerialBuffer();
-      } break;
+      }
+      break;
     case 'D':
       {
         if (Serial.available() < KD_PACKET_SIZE)
           break;
-        kd = Serial.parseFloat();
-        if (Serial.read() == 13)
-        {
-          if (Serial.read() == 10)
-          {
+        if (Serial.read() == 13) {
+          if (Serial.read() == 10) {
+            kd = Serial.parseFloat();
             Serial.print("KD: ");
             Serial.println(kd);
-          }
-          else
+          } else
             clearSerialBuffer();
-        }
-        else
+        } else
           clearSerialBuffer();
-      } break;
+      }
+      break;
     default:
       clearSerialBuffer();
       break;
   }
 }
-void clearSerialBuffer()
-{
+void clearSerialBuffer() {
   while (Serial.available())
     Serial.read();
 }
-void turn()
-{
+void turn() {
   digitalWrite(ind, LOW);
   digitalWrite(inc, HIGH);
   digitalWrite(inb, LOW);

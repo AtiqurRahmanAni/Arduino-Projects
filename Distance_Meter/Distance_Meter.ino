@@ -32,4 +32,7 @@ void loop()
   sprintf(s2, "%-7scm", s1);
   lcd.print(s2);
   delay(500);
+
+  
+
 }

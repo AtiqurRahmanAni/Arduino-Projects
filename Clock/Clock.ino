@@ -12,9 +12,9 @@ void setup()
   lcd.clear();
   pinMode(13,OUTPUT);
   digitalWrite(13,LOW);
-  rtc.setDOW(FRIDAY);     // Set Day-of-Week to SUNDAY
-  //rtc.setTime(22,14,40);     // Set the time to 12:00:00 (24hr format)
-  rtc.setDate(28, 8, 2020);   // Set the date to January 1st, 2014
+  rtc.setDOW(TUESDAY);     // Set Day-of-Week to SUNDAY
+  rtc.setTime(18,42,0);     // Set the time to 12:00:00 (24hr format)
+  rtc.setDate(5, 3, 2024);   // Set the date to January 1st, 2014
 }
 
 void loop()
@@ -22,8 +22,6 @@ void loop()
   s=rtc.getTimeStr();
   s1=rtc.getDOWStr();
   Serial.println(s);
-  Serial.println(s1);
-  Serial.println(rtc.getDateStr());
   if((s[0]=='1' && (s[1]=='2'||s[1]=='3'||s[1]=='4'||s[1]=='5'||s[1]=='6'||s[1]=='7'||s[1]=='8'||s[1]=='9')))
   {
     lcd.setCursor(8,0);
@@ -109,5 +107,4 @@ void loop()
   lcd.print(s1[0]);
   lcd.print(s1[1]);
   lcd.print(s1[2]);
-  delay(100);
 }

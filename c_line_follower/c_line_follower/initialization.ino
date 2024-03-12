@@ -1,0 +1,19 @@
+void initialize()
+{
+  pinMode(ina,OUTPUT);
+  pinMode(inb,OUTPUT);
+  pinMode(inc,OUTPUT);
+  pinMode(ind,OUTPUT);
+  pinMode(ena,OUTPUT);
+  pinMode(ena,OUTPUT);
+  pinMode(13,OUTPUT);
+  digitalWrite(ina,0);
+  digitalWrite(inb,0);
+  digitalWrite(inc,0);
+  digitalWrite(ind,0);
+  digitalWrite(13,0);
+  lastsensor=0;
+  preverror=0;
+  Serial.begin(9600);
+  Serial.println("commence");
+}
